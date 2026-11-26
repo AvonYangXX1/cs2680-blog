@@ -5,6 +5,8 @@ authors: ["Avon Yang"]
 summary: "My two valid A5 submissions solved 21 and 36 Terminal-Bench tasks. What I changed, the mistakes behind those decisions, and the experiments I still need to repeat."
 tags: ["agent-design", "testing", "observability", "tool-use"]
 draft: false
+cover: "cover.webp"
+coverAlt: "Illustration: twelve terminal windows send requests along colored lines into one GPU, while more tasks wait in a tray; a card on the right shows two rising step lines."
 ---
 
 My first valid A5 submission solved 21 of 89 tasks and finished just 77.7 seconds inside the two-hour baseline. In the next submission, I changed the harness from opening up to 25 tasks at once to opening up to 12. It solved 36 tasks in about two and a half hours.
