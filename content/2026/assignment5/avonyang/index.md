@@ -25,7 +25,7 @@ I ran short synthetic tests with 8, 12, 16, and 25 streams. At 25 streams, each 
 
 *Figure 1. Four-minute synthetic tests. Prompt lengths also differed across settings; this was not a controlled comparison of concurrency alone.*
 
-I used these measurements to choose 12 tasks at once for the next submission. The change was in how many tasks the harness opened. The separate model-request concurrency setting stayed at 25. The subsequent run on A4's tasks also retained 25 task slots. The submitted files differed only in `config.py` and `agentic_loop.py`; the engine and model were unchanged.
+I used these measurements to choose 12 tasks at once for the next submission. The change was in how many tasks the harness opened. The separate model-request concurrency setting stayed at 25. The submitted files differed only in `config.py` and `agentic_loop.py`, and both changes were about task slots: `config.py` set the default to 12, and `agentic_loop.py` read the first task's time limit and kept 25 slots only when that limit covered the whole run. So the same submission's run on the 26 A4 tasks still used 25 task slots. Everything else in the two zips was identical, including the prompts, the requirement review and the 60-second command reserve described below, so those were in both runs. The engine and model were unchanged.
 
 I picked 12 rather than 8 because of the total, not the per-stream rate. Eight streams gave each stream the most turns (1.93 per minute), but the server finished only 62 calls in four minutes, against 72 at 12. Real tasks also spend part of their time running commands, so 12 open tasks would put fewer than 12 requests on the server at once. I also checked that 12 would still fit the six-hour window: the first run's task times added up to 101,705 seconds, which over 12 slots is roughly 2.4 hours plus the tail. The run took 2.5 hours.
 
@@ -40,7 +40,7 @@ The version configured for 12 tasks at once solved 15 more tasks and took about 
 
 *Figure 2. Progress in the two official runs, including the two-hour mark and the task-count targets.*
 
-Seventeen tasks passed in both runs, nineteen passed only in #229, and four passed only in #224. The timing distribution changed too. The count reaching at least 95% of the public time limits fell from 54 to 31, while the count of unsolved tasks ending earlier rose from 16 to 25. Among the tasks reaching that threshold, the median recorded rate was 1.72 turns per minute in #224 and 2.75 in #229. The leaderboard's definition of a turn may differ from a model call.
+Seventeen tasks passed in both runs, nineteen passed only in #229, and four passed only in #224. The timing distribution changed too. The number of unsolved tasks that ran to at least 95% of their public time limits fell from 52 to 28, while the number of unsolved tasks ending earlier rose from 16 to 25. Counting the two and three solved tasks that also ran that long, the totals were 54 and 31. Among the tasks reaching that threshold, the median recorded rate was 1.72 turns per minute in #224 and 2.75 in #229. The leaderboard's definition of a turn may differ from a model call.
 
 ![Comparison of task outcomes in submissions 224 and 229.](fig-a5-task-outcomes.svg)
 
@@ -66,7 +66,7 @@ In A3, every model call drew from a dollar budget. My best submission, time4, re
 
 When I ported the agent to A4, I left its $8 budget cap in place. Eight workers hit the cap and stopped. The baseline ended after 38.8 minutes despite having four hours available.
 
-The 87.5% model-time share in my A4 measurements came from this same interrupted baseline. Tools accounted for 6.1%, verification 3.1%, and grading 2.1%. The model occupied most of the recorded task time, but this was also a run whose controller had stopped it early.
+The 87.5% model-time share in my A4 measurements came from this same interrupted baseline. Tools accounted for 6.1%, verification 3.1%, grading 2.1%, and other agent work (setup and patch building) 1.2%. The model occupied most of the recorded task time, but this was also a run whose controller had stopped it early.
 
 ![Three stacked panels over the 38.8-minute A4 baseline: what the 25 live tasks were doing, running and queued requests at the server, and KV-cache usage.](fig-a4-baseline-time-breakdown.svg)
 
