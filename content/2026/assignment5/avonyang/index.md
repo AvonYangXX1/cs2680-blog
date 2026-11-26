@@ -68,9 +68,9 @@ When I ported the agent to A4, I left its $8 budget cap in place. Eight workers 
 
 The 87.5% model-time share in my A4 measurements came from this same interrupted baseline. Tools accounted for 6.1%, verification 3.1%, grading 2.1%, and other agent work (setup and patch building) 1.2%. The model occupied most of the recorded task time, but this was also a run whose controller had stopped it early.
 
-![Three stacked panels over the 38.8-minute A4 baseline: what the 25 live tasks were doing, running and queued requests at the server, and KV-cache usage.](fig-a4-baseline-time-breakdown.svg)
+![Three stacked panels over the 38.8-minute A4 baseline on the local 25-task set: what the 25 live tasks were doing, running and queued requests at the server, and KV-cache usage.](fig-a4-baseline-time-breakdown.svg)
 
-*Figure 4. The A4 baseline run, rebuilt from its traces and the server's /metrics. Most live tasks were waiting on a model request; the dashed line marks the first task stopped by the $8 budget at 35.8 minutes.*
+*Figure 4. The A4 baseline run on my local 25-task set (not the leaderboard's 26 tasks; it solved 14/25), rebuilt from its traces and the server's /metrics. Most live tasks were waiting on a model request; the dashed line marks the first task stopped by the $8 budget at 35.8 minutes.*
 
 A5 needed a different time policy again. One smoke-test command ran for 288 seconds up to the task deadline. I changed command handling to reserve at least 60 seconds before the deadline, leaving time to inspect output and finish. I also removed the assumption that every task ended with a patch. For a service task, for example, the service had to stay running after `done`.
 
